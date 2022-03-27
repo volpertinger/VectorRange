@@ -1,4 +1,4 @@
-# include "../Include/similarity.h"
+# include "../Headers/similarity.h"
 
 double count_range(int n, const double *lhs, const double *rhs) {
     double result = 0;

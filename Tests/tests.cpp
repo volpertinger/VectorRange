@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
 
 extern "C" {
-#include "../Include/similarity.h"
+#include "../Headers/similarity.h"
+#include "../Headers/vector_range_successively.h"
 }
 
 class TestSimilarity : public ::testing::Test {
