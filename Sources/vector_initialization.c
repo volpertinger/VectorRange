@@ -1,7 +1,9 @@
 #include "../Headers/vector_initialization.h"
 
 double get_current_element(int x, int y) {
-    return -500 + 0.2 * x + y * 4.3;
+    ++x;
+    ++y;
+    return -500 + 0.2 * x * y * y + y * y * y * y * 4.3;
 }
 
 int generate_vectors(FILE *output, int size, int number) {
