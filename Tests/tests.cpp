@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <stdlib.h>
 
 extern "C" {
 #include "../Headers/similarity.h"
@@ -6,7 +7,9 @@ extern "C" {
 }
 
 class TestSimilarity : public ::testing::Test {
-protected:
+};
+
+class TestVectorRangeSuccessively : public ::testing::Test {
 };
 
 TEST_F(TestSimilarity, count_range) {
@@ -87,6 +90,60 @@ TEST_F(TestSimilarity, get_similarity_doubles) {
     double lhs[size] = {1.24, 2.4433, 3, 5.2};
     double rhs[size] = {6, -9.34, -1.1, 34.2};
     ASSERT_EQ(0.67045646948567628, get_similarity(size, lhs, rhs));
+}
+
+TEST_F(TestSimilarity, get_distance) {
+    const int size = 4;
+    double lhs[size] = {1, 2, 3, 5};
+    double rhs[size] = {6, -9, -1, 34};
+    ASSERT_EQ(0.30463203272638728, get_distance(size, lhs, rhs));
+}
+
+TEST_F(TestSimilarity, get_distance_zeros) {
+    const int size = 4;
+    double lhs[size] = {0, 0, 0, 0};
+    double rhs[size] = {0, 0, 0, 0};
+    ASSERT_EQ(1, get_distance(size, lhs, rhs));
+}
+
+TEST_F(TestSimilarity, get_distance_empty) {
+    const int size = 0;
+    double lhs[size] = {};
+    double rhs[size] = {};
+    ASSERT_EQ(1, get_distance(size, lhs, rhs));
+}
+
+TEST_F(TestSimilarity, get_distance_doubles) {
+    const int size = 4;
+    double lhs[size] = {1.24, 2.4433, 3, 5.2};
+    double rhs[size] = {6, -9.34, -1.1, 34.2};
+    ASSERT_EQ(0.32954353051432372, get_distance(size, lhs, rhs));
+}
+
+TEST_F(TestVectorRangeSuccessively, common_data) {
+    const int size_vector = 3;
+    const int size_vectors = 3;
+    auto **vectors = new double *[size_vectors];
+    for (int i = 0; i < size_vectors; ++i) {
+        vectors[i] = new double[size_vector];
+    }
+    vectors[0][0] = 1.4;
+    vectors[0][1] = 1.2;
+    vectors[0][2] = 1.;
+    vectors[1][0] = 5.34;
+    vectors[1][1] = 5.;
+    vectors[1][2] = 5.2;
+    vectors[2][0] = 10.32;
+    vectors[2][1] = 18.23;
+    vectors[2][2] = 70.;
+    int i = 4;
+    double delta = 5;
+    auto *vector = new double[size_vector];
+    vector[0] = vectors[1][0];
+    vector[1] = vectors[1][1];
+    vector[2] = vectors[1][2];
+    auto nearestVector = get_nearest_vector(vector, size_vector, vectors, size_vectors);
+    ASSERT_EQ(vectors[1], nearestVector);
 }
 
 
