@@ -14,7 +14,8 @@ file(GLOB EXC_TEST "Tests/*.cpp")
 
 add_library(lib ${INCLUDE} ${SOURCES})
 add_executable(main ${EXC})
-target_link_libraries(main lib)
+target_link_libraries(main lib m)
+
 
 include(FetchContent)
 FetchContent_Declare(
