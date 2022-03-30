@@ -4,12 +4,44 @@
 extern "C" {
 #include "../Headers/similarity.h"
 #include "../Headers/vector_range_successively.h"
+#include "../Headers/vector_initialization.h"
 }
 
 class TestSimilarity : public ::testing::Test {
 };
 
 class TestVectorRangeSuccessively : public ::testing::Test {
+};
+
+class TestVectorInitialization : public ::testing::Test {
+public:
+    int size = 3;
+    int number = 10;
+    char fileName[20] = "fileTest";
+    double **vectors;
+    FILE *file;
+
+    void SetUp() {
+        file = fopen(fileName, "w");
+        fclose(file);
+
+        vectors = new double *[number];
+        for (int i = 0; i < number; ++i) {
+            auto current_vector = new double[size];
+            for (int j = 0; j < size; ++j) {
+                current_vector[j] = get_current_element(i, j);
+            }
+            vectors[i] = current_vector;
+        }
+    }
+
+    void TearDown() {
+        remove(fileName);
+        for (int i = 0; i < number; ++i) {
+            delete[] vectors[i];
+        }
+        delete[] vectors;
+    }
 };
 
 TEST_F(TestSimilarity, count_range) {
@@ -144,6 +176,29 @@ TEST_F(TestVectorRangeSuccessively, common_data) {
     vector[2] = vectors[1][2];
     auto nearestVector = get_nearest_vector(vector, size_vector, vectors, size_vectors);
     ASSERT_EQ(vectors[1], nearestVector);
+}
+
+TEST_F(TestVectorInitialization, get_cuurent_element) {
+    ASSERT_EQ(-495.5, get_current_element(0, 0));
+    ASSERT_EQ(-430.4, get_current_element(0, 1));
+    ASSERT_EQ(-149.89999999999998, get_current_element(0, 2));
+    ASSERT_EQ(54.100000000000065, get_current_element(2748, 0));
+    ASSERT_EQ(1123.5, get_current_element(8095, 0));
+}
+
+TEST_F(TestVectorInitialization, generate_vectors) {
+    file = fopen(fileName, "w");
+    generate_vectors(file, size, number);
+    fclose(file);
+    file = fopen(fileName, "r");
+    auto vectors_test = get_vector(file, size, number);
+
+    for (int i = 0; i < number; ++i) {
+        for (int j = 0; j < size; ++j) {
+            // Округляем т.к. точность при чтении с файла теряется
+            ASSERT_EQ(round(vectors_test[i][j] * 100) / 100, round(vectors[i][j] * 100) / 100);
+        }
+    }
 }
 
 
