@@ -19,3 +19,30 @@ int generate_vectors(FILE *output, int size, int number) {
 
     return COMMON_RETURN;
 }
+
+double **get_vector(FILE *input, int size, int number) {
+    if (input == NULL || size <= 0 || number <= 0)
+        return NULL;
+
+    double **vectors;
+    vectors = malloc(sizeof(double *) * number);
+    if (vectors == NULL)
+        return NULL;
+
+    char buffer[BUFFER_SIZE];
+    for (int i = 0; i < number; ++i) {
+        double *current_vector;
+        current_vector = malloc(sizeof(double) * size);
+        if (current_vector == NULL)
+            return NULL;
+
+        for (int j = 0; j < size; ++j) {
+            if (fscanf(input, "%s", buffer) == EOF)
+                return NULL;
+            current_vector[j] = strtod(buffer, NULL);
+        }
+        vectors[i] = current_vector;
+    }
+    return vectors;
+}
+
