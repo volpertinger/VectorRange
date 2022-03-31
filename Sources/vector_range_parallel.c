@@ -31,8 +31,8 @@ int get_begin_index(int vectors_size, int index) {
     return get_end_index(vectors_size, index - 1);
 }
 
-double *get_nearest_vector_process(double *vector, int vector_size, double **vectors, int index_begin,
-                                   int index_end) {
+double *get_nearest_vector_single_process(double *vector, int vector_size, double **vectors,
+                                          int index_begin, int index_end) {
     if (index_begin > index_end || index_begin < 0 || index_end < 0)
         return NULL;
 
@@ -73,9 +73,9 @@ double *get_nearest_vector_parallel(double *vector, int vector_size, double **ve
         pid_array[i] = fork();
         // проверка, чтобы запустить поиск в дочернем процессе
         if (getpid() != main_pid) {
-            double *vector_nearest = get_nearest_vector_process(vector, vector_size, vectors,
-                                                                get_begin_index(vectors_size, i),
-                                                                get_end_index(vectors_size, i));
+            double *vector_nearest = get_nearest_vector_single_process(vector, vector_size, vectors,
+                                                                       get_begin_index(vectors_size, i),
+                                                                       get_end_index(vectors_size, i));
             // вектор отправляется в родительский процесс
             close(fd[i][0]);
             write(fd[i][1], &vector_nearest, sizeof(vector_nearest));
@@ -95,5 +95,5 @@ double *get_nearest_vector_parallel(double *vector, int vector_size, double **ve
             close(fd[i][0]);
         }
     }
-    return get_nearest_vector_process(vector, vector_size, pipe_vectors, 0, process_number - 1);
+    return get_nearest_vector_single_process(vector, vector_size, pipe_vectors, 0, process_number - 1);
 }

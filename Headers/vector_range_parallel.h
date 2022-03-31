@@ -25,8 +25,8 @@ int get_begin_index(int vectors_size, int index);
 // Поиск ближайшего вектора в промежутке массива векторов. На входе: вектор, к которому ищется ближайший;
 // Размерность векторов; массив векторов, в котором ищем ближайший; индекс начала промежутка;
 // индекс конца промежутка
-double *get_nearest_vector_process(double *vector, int vector_size, double **vectors, int index_begin,
-                                   int index_end);
+double *get_nearest_vector_single_process(double *vector, int vector_size, double **vectors, int index_begin,
+                                          int index_end);
 
 
 #endif //VECTORRANGE_VECTOR_RANGE_PARALLEL_H
