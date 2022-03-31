@@ -224,7 +224,9 @@ TEST_F(TestVectorRangeParallel, common_data) {
     vector[1] = vectors[1][1];
     vector[2] = vectors[1][2];
     auto nearestVector = get_nearest_vector_parallel(vector, size_vector, vectors, size_vectors);
-    ASSERT_EQ(vectors[1], nearestVector);
+    for (int i = 0; i < size_vectors; ++i) {
+        ASSERT_EQ(round(vectors[1][i] * 100) / 100., round(nearestVector[i] * 100) / 100.);
+    }
 }
 
 
