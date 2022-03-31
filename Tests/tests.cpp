@@ -90,7 +90,7 @@ TEST_F(TestSimilarity, count_abs_zeros) {
 TEST_F(TestSimilarity, count_abs_empty) {
     const int size = 0;
     double array[size] = {};
-    ASSERT_EQ(0, count_abs(size, array));
+    ASSERT_EQ(-1, count_abs(size, array));
 }
 
 TEST_F(TestSimilarity, count_abs_doubles) {
@@ -145,7 +145,7 @@ TEST_F(TestSimilarity, get_distance_empty) {
     const int size = 0;
     double lhs[size] = {};
     double rhs[size] = {};
-    ASSERT_EQ(1, get_distance(size, lhs, rhs));
+    ASSERT_EQ(-1, get_distance(size, lhs, rhs));
 }
 
 TEST_F(TestSimilarity, get_distance_doubles) {
@@ -187,9 +187,9 @@ TEST_F(TestVectorInitialization, get_current_element) {
     ASSERT_EQ(1123.5, get_current_element(8095, 0));
 }
 
-TEST_F(TestVectorInitialization, generate_vectors) {
+TEST_F(TestVectorInitialization, write_vectors) {
     file = fopen(fileName, "w");
-    generate_vectors(file, size, number);
+    write_vectors(file, size, number);
     fclose(file);
     file = fopen(fileName, "r");
     auto vectors_test = get_vector(file, size, number);
