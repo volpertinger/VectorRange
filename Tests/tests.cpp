@@ -178,7 +178,7 @@ TEST_F(TestVectorRangeSuccessively, common_data) {
     ASSERT_EQ(vectors[1], nearestVector);
 }
 
-TEST_F(TestVectorInitialization, get_cuurent_element) {
+TEST_F(TestVectorInitialization, get_current_element) {
     ASSERT_EQ(-495.5, get_current_element(0, 0));
     ASSERT_EQ(-430.4, get_current_element(0, 1));
     ASSERT_EQ(-149.89999999999998, get_current_element(0, 2));
@@ -191,12 +191,12 @@ TEST_F(TestVectorInitialization, generate_vectors) {
     generate_vectors(file, size, number);
     fclose(file);
     file = fopen(fileName, "r");
-    auto vectors_test = get_vector(file, size, number);
+    auto vectors_test = get_vector(file, size, number,0);
 
     for (int i = 0; i < number; ++i) {
         for (int j = 0; j < size; ++j) {
             // Округляем т.к. точность при чтении с файла теряется
-            ASSERT_EQ(round(vectors_test[i][j] * 100) / 100, round(vectors[i][j] * 100) / 100);
+            ASSERT_EQ(round(vectors_test[i][j] * 100) / 100., round(vectors[i][j] * 100) / 100.);
         }
     }
 }

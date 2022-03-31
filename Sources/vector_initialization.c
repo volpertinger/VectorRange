@@ -22,7 +22,7 @@ int generate_vectors(FILE *output, int size, int number) {
     return COMMON_RETURN;
 }
 
-double **get_vector(FILE *input, int size, int number) {
+double **get_vector(FILE *input, int size, int number, int index_start) {
     if (input == NULL || size <= 0 || number <= 0)
         return NULL;
 
