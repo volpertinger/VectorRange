@@ -3,16 +3,18 @@
 
 #include <stdio.h>
 
-int get_process_number() {
+int get_processes_number() {
+    if (sysconf(_SC_NPROCESSORS_ONLN) < 2)
+        return 1;
     return (int) sysconf(_SC_NPROCESSORS_ONLN) / 2;
 }
 
 int get_step(int vectors_size) {
-    return vectors_size / get_process_number();
+    return (int) vectors_size / get_processes_number();
 }
 
 int get_end_index(int vectors_size, int index) {
-    if (index < 0 || index == get_process_number() - 1)
+    if (index < 0 || index == get_processes_number() - 1)
         return vectors_size - 1;
     // не последний кусок
     return get_step(vectors_size) * (index + 1);
@@ -22,7 +24,7 @@ int get_begin_index(int vectors_size, int index) {
     if (index < 0)
         return 0;
     // не последний кусок
-    if (index != get_process_number() - 1) {
+    if (index != get_processes_number() - 1) {
         return get_step(vectors_size) * index;
     }
     // начало последнего куска - конец предпоследнего
@@ -50,7 +52,7 @@ double *get_nearest_vector_parallel(double *vector, int vector_size, double **ve
     if (vector_size <= 0 || vectors_size <= 0 || vector == NULL || vectors == NULL)
         return NULL;
 
-    int process_number = get_process_number();
+    int process_number = get_processes_number();
     // дальше создаются процессы и чтобы цикл работал верно, нужно знать родительский pid
     pid_t main_pid = getpid();
     // массив pid созданных
