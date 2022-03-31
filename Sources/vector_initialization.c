@@ -1,12 +1,10 @@
 #include "../Headers/vector_initialization.h"
 
-double get_current_element(int x, int y) {
-    ++x;
-    ++y;
-    return -500 + 0.2 * x * y * y + y * y * y * y * 4.3;
+double get_current_element(const int x, const int y) {
+    return -500 + 0.2 * (x + 1) * (y + 1) * (y + 1) + (y + 1) * (y + 1) * (y + 1) * (y + 1) * 4.3;
 }
 
-int generate_vectors(FILE *output, int size, int number) {
+int write_vectors(FILE *output, int size, int number) {
     if (output == NULL)
         return BAD_FILE_STREAM_EXIT;
     if (size <= 0 || number <= 0)
