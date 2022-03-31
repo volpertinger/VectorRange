@@ -1,6 +1,8 @@
 #ifndef VECTORRANGE_SIMILARITY_H
 #define VECTORRANGE_SIMILARITY_H
 
+#define INVALID_SIZE_RETURN -1
+
 #include <math.h>
 # include <stdlib.h>
 

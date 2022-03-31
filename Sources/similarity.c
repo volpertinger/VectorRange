@@ -9,6 +9,8 @@ double count_range(const int n, const double *lhs, const double *rhs) {
 }
 
 double count_abs(const int n, const double *vector) {
+    if (n <= 0)
+        return INVALID_SIZE_RETURN;
     double result = 0;
     for (int i = 0; i < n; ++i) {
         result += pow(vector[i], 2);
@@ -23,6 +25,8 @@ double get_similarity(const int n, const double *lhs, const double *rhs) {
     return count_range(n, lhs, rhs) / denominator;
 }
 
-double get_distance(const int n,const double *lhs,const double *rhs) {
+double get_distance(const int n, const double *lhs, const double *rhs) {
+    if (n <= 0)
+        return INVALID_SIZE_RETURN;
     return fabs(get_similarity(n, lhs, rhs) - 1);
 }
