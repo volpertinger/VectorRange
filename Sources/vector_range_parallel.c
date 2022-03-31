@@ -64,12 +64,18 @@ double *get_nearest_vector_parallel(double *vector, int vector_size, double **ve
     int fd[process_number][2];
     double **pipe_vectors;
     pipe_vectors = malloc(sizeof(double *) * process_number);
-
-
+    if (pipe_vectors == NULL)
+        return NULL;
     for (int i = 0; i < process_number; ++i) {
         // для каждого дочернего процесса создается pipe и выделяется место для записи вектора
         pipe_vectors[i] = malloc(sizeof(double) * vector_size);
+        if (pipe_vectors[i] == NULL)
+            return NULL;
         pipe(fd[i]);
+    }
+
+
+    for (int i = 0; i < process_number; ++i) {
         pid_array[i] = fork();
         // проверка, чтобы запустить поиск в дочернем процессе
         if (getpid() != main_pid) {

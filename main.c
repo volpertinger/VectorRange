@@ -11,18 +11,21 @@ int main() {
 
     char filename[MAX_PATH];
     int size, number, parallel;
-    if (!scanf("%s %d %d %d", filename, &size, &number, &parallel))
+    if (!scanf("%s %d %d %d", filename, &size, &number, &parallel)) {
         return 1;
+    }
     double vector[size];
     for (int i = 0; i < size; ++i) {
-        if (!scanf("%lf", &vector[i]))
+        if (!scanf("%lf", &vector[i])) {
             return 1;
+        }
     }
 
     FILE *file;
     file = fopen(filename, "r");
-    if (!file)
+    if (!file) {
         return 1;
+    }
     double **vectors = get_vector(file, size, number);
 
     double *nearest_vector;
