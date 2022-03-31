@@ -46,6 +46,34 @@ public:
 };
 
 class TestVectorRangeParallel : public ::testing::Test {
+public:
+    int size = 3;
+    int number = 10;
+    char fileName[20] = "fileTest";
+    double **vectors;
+    FILE *file;
+
+    void SetUp() {
+        file = fopen(fileName, "w");
+        fclose(file);
+
+        vectors = new double *[number];
+        for (int i = 0; i < number; ++i) {
+            auto current_vector = new double[size];
+            for (int j = 0; j < size; ++j) {
+                current_vector[j] = get_current_element(i, j);
+            }
+            vectors[i] = current_vector;
+        }
+    }
+
+    void TearDown() {
+        remove(fileName);
+        for (int i = 0; i < number; ++i) {
+            delete[] vectors[i];
+        }
+        delete[] vectors;
+    }
 };
 
 TEST_F(TestSimilarity, count_range) {
@@ -220,12 +248,12 @@ TEST_F(TestVectorRangeParallel, common_data) {
     vectors[2][1] = 18.23;
     vectors[2][2] = 70.;
     auto *vector = new double[size_vector];
-    vector[0] = vectors[1][0];
-    vector[1] = vectors[1][1];
-    vector[2] = vectors[1][2];
+    vector[0] = vectors[2][0];
+    vector[1] = vectors[2][1];
+    vector[2] = vectors[2][2];
     auto nearestVector = get_nearest_vector_parallel(vector, size_vector, vectors, size_vectors);
     for (int i = 0; i < size_vectors; ++i) {
-        ASSERT_EQ(round(vectors[1][i] * 100) / 100., round(nearestVector[i] * 100) / 100.);
+        ASSERT_EQ(round(vectors[2][i] * 100) / 100., round(nearestVector[i] * 100) / 100.);
     }
 }
 
