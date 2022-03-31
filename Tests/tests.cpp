@@ -4,6 +4,7 @@
 extern "C" {
 #include "../Headers/similarity.h"
 #include "../Headers/vector_range_successively.h"
+#include "../Headers/vector_range_parallel.h"
 #include "../Headers/vector_initialization.h"
 }
 
@@ -42,6 +43,9 @@ public:
         }
         delete[] vectors;
     }
+};
+
+class TestVectorRangeParallel : public ::testing::Test {
 };
 
 TEST_F(TestSimilarity, count_range) {
@@ -168,8 +172,6 @@ TEST_F(TestVectorRangeSuccessively, common_data) {
     vectors[2][0] = 10.32;
     vectors[2][1] = 18.23;
     vectors[2][2] = 70.;
-    int i = 4;
-    double delta = 5;
     auto *vector = new double[size_vector];
     vector[0] = vectors[1][0];
     vector[1] = vectors[1][1];
@@ -191,7 +193,7 @@ TEST_F(TestVectorInitialization, generate_vectors) {
     generate_vectors(file, size, number);
     fclose(file);
     file = fopen(fileName, "r");
-    auto vectors_test = get_vector(file, size, number,0);
+    auto vectors_test = get_vector(file, size, number, 0);
 
     for (int i = 0; i < number; ++i) {
         for (int j = 0; j < size; ++j) {
@@ -199,6 +201,30 @@ TEST_F(TestVectorInitialization, generate_vectors) {
             ASSERT_EQ(round(vectors_test[i][j] * 100) / 100., round(vectors[i][j] * 100) / 100.);
         }
     }
+}
+
+TEST_F(TestVectorRangeParallel, common_data) {
+    const int size_vector = 3;
+    const int size_vectors = 3;
+    auto **vectors = new double *[size_vectors];
+    for (int i = 0; i < size_vectors; ++i) {
+        vectors[i] = new double[size_vector];
+    }
+    vectors[0][0] = 1.4;
+    vectors[0][1] = 1.2;
+    vectors[0][2] = 1.;
+    vectors[1][0] = 5.34;
+    vectors[1][1] = 5.;
+    vectors[1][2] = 5.2;
+    vectors[2][0] = 10.32;
+    vectors[2][1] = 18.23;
+    vectors[2][2] = 70.;
+    auto *vector = new double[size_vector];
+    vector[0] = vectors[1][0];
+    vector[1] = vectors[1][1];
+    vector[2] = vectors[1][2];
+    auto nearestVector = get_nearest_vector_parallel(vector, size_vector, vectors, size_vectors);
+    ASSERT_EQ(vectors[1], nearestVector);
 }
 
 
