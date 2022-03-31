@@ -16,7 +16,6 @@ int get_end_index(int vectors_size, int index) {
         return vectors_size - 1;
     // не последний кусок
     return get_step(vectors_size) * (index + 1);
-
 }
 
 int get_begin_index(int vectors_size, int index) {
