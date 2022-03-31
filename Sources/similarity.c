@@ -11,7 +11,7 @@ double count_range(int n, const double *lhs, const double *rhs) {
 double count_abs(int n, const double *vector) {
     double result = 0;
     for (int i = 0; i < n; ++i) {
-        result += vector[i] * vector[i];
+        result += pow(vector[i],2);
     }
     return sqrt(result);
 }

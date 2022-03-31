@@ -192,7 +192,7 @@ TEST_F(TestVectorInitialization, generate_vectors) {
     generate_vectors(file, size, number);
     fclose(file);
     file = fopen(fileName, "r");
-    auto vectors_test = get_vector(file, size, number, 0);
+    auto vectors_test = get_vector(file, size, number);
 
     for (int i = 0; i < number; ++i) {
         for (int j = 0; j < size; ++j) {

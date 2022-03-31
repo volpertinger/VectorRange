@@ -17,6 +17,7 @@ double get_current_element(int x, int y);
 // в каждой строке - вектор, через пробелы - его элементы
 int generate_vectors(FILE *output, int size, int number);
 
-double **get_vector(FILE *input, int size, int number, int index_start);
+// Из потока input читает массив векторов размерности size размера number.
+double **get_vector(FILE *input, int size, int number);
 
 #endif //VECTORRANGE_VECTOR_INITIALIZATION_H

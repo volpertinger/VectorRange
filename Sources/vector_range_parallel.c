@@ -71,7 +71,7 @@ double *get_nearest_vector_parallel(double *vector, int vector_size, double **ve
         pid_array[i] = fork();
         // проверка, чтобы запустить поиск в дочернем процессе
         if (getpid() != main_pid) {
-            double *vector_nearest = get_nearest_vector_process(vector, vectors_size, vectors,
+            double *vector_nearest = get_nearest_vector_process(vector, vector_size, vectors,
                                                                 get_begin_index(vectors_size, i),
                                                                 get_end_index(vectors_size, i));
             // вектор отправляется в родительский процесс
@@ -93,5 +93,5 @@ double *get_nearest_vector_parallel(double *vector, int vector_size, double **ve
             close(fd[i][0]);
         }
     }
-    return get_nearest_vector_process(vector, vectors_size, pipe_vectors, 0, process_number - 1);
+    return get_nearest_vector_process(vector, vector_size, pipe_vectors, 0, process_number - 1);
 }

@@ -22,8 +22,8 @@ int generate_vectors(FILE *output, int size, int number) {
     return COMMON_RETURN;
 }
 
-double **get_vector(FILE *input, int size, int number, int index_start) {
-    if (input == NULL || size <= 0 || number <= 0 || index_start >= number)
+double **get_vector(FILE *input, int size, int number) {
+    if (input == NULL || size <= 0 || number <= 0)
         return NULL;
 
     double **vectors;
@@ -32,7 +32,7 @@ double **get_vector(FILE *input, int size, int number, int index_start) {
         return NULL;
 
     char buffer[BUFFER_SIZE];
-    for (int i = index_start; i < number; ++i) {
+    for (int i = 0; i < number; ++i) {
         double *current_vector;
         current_vector = malloc(sizeof(double) * size);
         if (current_vector == NULL)

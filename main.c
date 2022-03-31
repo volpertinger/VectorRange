@@ -23,7 +23,7 @@ int main() {
     file = fopen(filename, "r");
     if (!file)
         return 1;
-    double **vectors = get_vector(file, size, number, 0);
+    double **vectors = get_vector(file, size, number);
 
     double *nearest_vector;
     if (!parallel) {
@@ -35,6 +35,12 @@ int main() {
     for (int i = 0; i < size; ++i) {
         printf("%f ", nearest_vector[i]);
     }
+
+    for (int i = 0; i < number; ++i)
+        free(vectors[i]);
+    free(vectors);
+
+    fclose(file);
 
     return 0;
 }
