@@ -56,44 +56,42 @@ double *get_nearest_vector_parallel(double *vector, int vector_size, double **ve
     // массив pid созданных
     pid_t pid_array[process_number];
 
+    // обмен данными между родительским и дочерним процессами идет с помощью pipe
+    // от каждого процесса - по вектору попадает в массив векторов
+    // затем из массива ищется ближайший
+    int fd[process_number][2];
+    double **pipe_vectors;
+    pipe_vectors = malloc(sizeof(double *) * process_number);
+
 
     for (int i = 0; i < process_number; ++i) {
+        // для каждого дочернего процесса создается pipe и выделяется место для записи вектора
+        pipe_vectors[i] = malloc(sizeof(double) * vector_size);
+        pipe(fd[i]);
         pid_array[i] = fork();
-        // проверка, чтобы создать нужное количество процессов только в главном
+        // проверка, чтобы запустить поиск в дочернем процессе
         if (getpid() != main_pid) {
-            printf("BEGIN: %d %d\n", get_begin_index(vectors_size, i), get_end_index(vectors_size, i));
             double *vector_nearest = get_nearest_vector_process(vector, vectors_size, vectors,
                                                                 get_begin_index(vectors_size, i),
                                                                 get_end_index(vectors_size, i));
-            for (int j = 0; j < vector_size; ++j)
-                printf("%f ", vector_nearest[j]);
-            printf("\n");
-            return vector_nearest;
+            // вектор отправляется в родительский процесс
+            close(fd[i][0]);
+            write(fd[i][1], &vector_nearest, sizeof(vector_nearest));
+            close(fd[i][1]);
+
+            exit(0);
         }
     }
 
     if (getpid() == main_pid) {
         for (int i = 0; i < process_number; ++i) {
-            printf("ARR:%d \n", pid_array[i]);
             waitpid(pid_array[i], 0, 0);
+
+            // чтение вектора с дочернего процесса
+            close(fd[i][1]);
+            read(fd[i][0], &pipe_vectors[i], sizeof(pipe_vectors[i]));
+            close(fd[i][0]);
         }
     }
-
-    /*
-     for (int j = 0; j < vector_size; ++j)
-                printf("%f ", vector_nearest[j]);
-            break;
-     */
-/*
-double min = get_distance(vector_size, vector, vectors[0]);
-double *nearest_vector = vectors[0];
-for (int i = 0; i < vectors_size; ++i) {
-    double current_distance = get_distance(vector_size, vector, vectors[i]);
-    if (current_distance < min) {
-        min = current_distance;
-        nearest_vector = vectors[i];
-    }
-}
-return nearest_vector;
- */
+    return get_nearest_vector_process(vector, vectors_size, pipe_vectors, 0, process_number - 1);
 }
