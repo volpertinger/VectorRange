@@ -45,36 +45,7 @@ public:
     }
 };
 
-class TestVectorRangeParallel : public ::testing::Test {
-public:
-    int size = 3;
-    int number = 10;
-    char fileName[20] = "fileTest";
-    double **vectors;
-    FILE *file;
-
-    void SetUp() {
-        file = fopen(fileName, "w");
-        fclose(file);
-
-        vectors = new double *[number];
-        for (int i = 0; i < number; ++i) {
-            auto current_vector = new double[size];
-            for (int j = 0; j < size; ++j) {
-                current_vector[j] = get_current_element(i, j);
-            }
-            vectors[i] = current_vector;
-        }
-    }
-
-    void TearDown() {
-        remove(fileName);
-        for (int i = 0; i < number; ++i) {
-            delete[] vectors[i];
-        }
-        delete[] vectors;
-    }
-};
+class TestVectorRangeParallel : public ::testing::Test {};
 
 TEST_F(TestSimilarity, count_range) {
     const int size = 4;
