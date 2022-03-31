@@ -1,6 +1,6 @@
 # include "../Headers/vector_range_successively.h"
 
-double *get_nearest_vector_parallel(double *vector, int vector_size, double **vectors, int vectors_size) {
+double *get_nearest_vector(double *vector, int vector_size, double **vectors, int vectors_size) {
     if (vector_size <= 0 || vectors_size <= 0 || vector == NULL || vectors == NULL)
         return NULL;
     double min = get_distance(vector_size, vector, vectors[0]);
